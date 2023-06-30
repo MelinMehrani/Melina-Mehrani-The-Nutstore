@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h1 class="my-4">{{ warehouse.name }}</h1>
+      <h3 class="mb-4">Warehouse ID: {{ warehouse.id }}</h3>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Warehouse Information</h5>
+          <ul class="list-unstyled">
+            <li><strong>City:</strong> {{ warehouse.city.name }}</li>
+            <li><strong>Location:</strong> {{ warehouse.location }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 class="mb-4">Products:</h2>
+      {% if products.count > 0 %}
+      <div class="table-responsive mb-4">
+        <table class="table table-bordered table-hover">
+          <thead style="text-align: center;">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Price</th>
+              <th scope="col">Stock</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in products %}
+            <tr>
+              <td class="align-middle">{{ product.id }}</td>
+              <td class="align-middle">{{ product.name }}</td>
+              <td class="align-middle">${{ product.price }}</td>
+              <td class="align-middle">{{ product.stock }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center">No products available.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p>No products available.</p>
+      {% endif %}
+
+    </div>
+
+    <div class="col-md-4" style="margin: 20px;">
+      <div class="row mb-4">
+        <div class="col">
+          <a href="{% url 'edit_warehouse' warehouse_id=warehouse.id %}" class="btn btn-primary mr-2">Edit Warehouse</a>
+          <a href="{% url 'manage_warehouses' %}" class="btn btn-secondary">Back to Warehouses</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .card-text {
+    margin-bottom: 0;
+  }
+
+  .list-unstyled li {
+    margin-bottom: 0.5rem;
+  }
+
+  .list-unstyled li strong {
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+
+  .table td,
+  .table th {
+    vertical-align: middle;
+  }
+
+  .table th {
+    font-weight: bold;
+    background-color: #f2f2f2;
+  }
+
+  .btn-primary {
+    color: white;
+    background-color: #7aa66f;
+    border-color: #7aa66f;
+  }
+
+  .btn-primary:hover {
+    background-color: #586e52;
+    border-color: #586e52;
+  }
+
+</style>
+{% endblock %}

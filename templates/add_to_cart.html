@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row justify-content-center" style="margin: 1.5rem;">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm">
+        {% if product.image %}
+          <img src="{{ product.image }}" class="card-img-top" alt="{{ product.name }}">
+        {% endif %}
+        <div class="card-body">
+          <h1 class="card-title">{{ product.name }}</h1>
+          <p class="card-text">{{ product.description }}</p>
+          <p class="card-text font-weight-bold">Price: {{ product.price }} $</p>
+          {% if request.user.is_authenticated %}
+            {% if request.user.is_seller %}
+              <form method="post" action="{% url 'add_to_cart' product.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="weight">Weight (kg):</label>
+                  <input type="number" class="form-control" name="weight" value="0" min="0" step="5">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+              </form>
+            {% else %}
+              <form method="post" action="{% url 'add_to_cart' product.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="weight">Weight (g):</label>
+                  <input type="number" class="form-control" name="weight" value="0" min="0" step="50">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+              </form>
+            {% endif %}
+          {% else %}
+            <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to purchase this product.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <style>
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .form-control {
+      border-radius: 20px;
+    }
+
+    .btn-primary {
+      border-radius: 20px;
+      padding: 10px 20px;
+      color: white;
+      background-color: #7aa66f;
+      border-color: #7aa66f;
+    }
+
+    .btn-primary:hover {
+      background-color: #586e52;
+      border-color: #586e52;
+    }
+
+    
+    body {
+      /* fallback for old browsers */
+        background: #F2F0EB;
+
+        /* Chrome 10-25, Safari 5.1-6 */
+        background: -webkit-linear-gradient(to right, #F2F0EB, rgb(167, 175, 151));
+
+        /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background: linear-gradient(to right, #F2F0EB, rgb(167, 175, 151))
+    }
+  </style>
+{% endblock %}

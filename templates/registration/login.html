@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-8 col-xl-6">
+        <div class="card shadow-sm rounded-3 border-light">
+          <div class="card-body p-5">
+            <div class="text-center mb-5">
+              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Log In</h3>
+            </div>
+            <div class="text-center">
+              <form method="post" class="form-horizontal d-inline-block">
+                {% csrf_token %}
+          
+                <div class="form-group">
+                  <label for="id_username">Username:</label>
+                  <input type="text" name="username" class="form-control" autofocus="" autocapitalize="none" autocomplete="username" maxlength="50" required="" id="id_username">
+                </div>
+                <div class="form-group">
+                  <label for="id_password">Password:</label>
+                  <input type="password" name="password" class="form-control" autocomplete="current-password" required="" id="id_password">
+                </div>
+
+                <div class="text-center">
+                  <button class="btn btn-primary btn-lg" type="submit" value="Submit">Log In</button>
+                </div>
+              </form>
+              
+            </div>
+            <div class="text-center mt-3">
+              <p>Don't have an account? <a href="{% url 'signup' %}">Create one</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  
+  .btn-lg {
+    background-color: #7aa66f;
+    border: none;
+    border-radius: 5px;
+    
+    font-weight: bold;
+    padding: 10px 20px;
+    margin-top: 1.5rem;
+  }
+
+  .btn-primary:hover {
+    background-color: #586e52;
+  }
+</style>
+<!-- <style>
+  .form-control {
+    border-radius: 10px;
+    border-color: #ced4da;
+    padding-left: 40px;
+  }
+  .form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.25rem rgba(128, 189, 255, 0.25);
+  }
+  .input-group {
+    width: 100%;
+  }
+  label[for="{{ form.username.id_for_label }}"],
+  label[for="{{ form.password.id_for_label }}"] {
+    display: none;
+  }
+  
+  input#{{ form.username.id_for_label }}::-webkit-input-placeholder,
+  input#{{ form.password.id_for_label }}::-webkit-input-placeholder {
+    color: #a0a0a0;
+  }
+  input#{{ form.username.id_for_label }}::-moz-placeholder,
+  input#{{ form.password.id_for_label }}::-moz-placeholder {
+    color: #a0a0a0;
+  }
+  input#{{ form.username.id_for_label }}:-ms-input-placeholder,
+  input#{{ form.password.id_for_label }}:-ms-input-placeholder {
+    color: #a0a0a0;
+  }
+  input#{{ form.username.id_for_label }}::placeholder,
+  input#{{ form.password.id_for_label }}::placeholder {
+    color: #a0a0a0;
+  }
+</style> -->
+{% endblock %}

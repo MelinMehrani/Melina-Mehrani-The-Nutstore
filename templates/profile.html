@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5" style="margin-top: 3rem; margin-bottom: 5rem;">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card mb-4 border-rounded">
+        <div class="card-header header-primary">
+          <h3 class="card-title mb-0">Personal Information</h3>
+        </div>
+        <div class="card-body">
+          <p><strong>Name:</strong> {{ user.name }}</p>
+          <p><strong>Last Name:</strong> {{ user.family_name }}</p>
+          <p><strong>Username:</strong> {{ user.username }}</p>
+          <p><strong>City:</strong> {{ user.city }}</p>
+          <p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>Address:</strong> {{ user.address }}</p>
+          {% if user.is_buyer %}
+              <p><strong>Customer type:</strong> Ordinary Customer</p>
+          {% elif user.is_seller %}
+              <p><strong>Customer type:</strong> WholeSale Customer</p>
+          {% endif %}
+          <p><a href="{% url 'change_password' %}" style="color: #7aa66f;">Change your password!</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card mb-4 border-rounded">
+        <div class="card-header header-secondary">
+          <h3 class="card-title mb-0">Order History</h3>
+        </div>
+        <div class="card-body">
+          {% if orders %}
+            <ul class="list-group list-group-flush">
+              {% for order in orders %}
+                <li class="list-group-item">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Order ID: {{ order.id }}</h5>
+                    <small>{{ order.created_at|date:"F d, Y" }}</small>
+                  </div>
+                  <!-- <p class="mb-1">Order Items: {{ order.items }} </p> -->
+                  <p class="mb-1">Order Total Cost: {{ order.total_cost }}</p>
+                  <p class="mb-0">Status: {{ order.get_status_display }}</p>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p>No orders found.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .header-primary {
+    background-color: #719967;
+    color: #fff;
+    border-color: #7aa66f;
+  }
+  
+  .header-secondary {
+    background-color: #719967;
+    color: #fff;
+    border-color: #7aa66f;
+  }
+  
+  .border-rounded {
+    border-radius: 10px;
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row justify-content-center" style="margin-top: 2rem; margin-bottom: 2rem;">
+    <div class="col-md-8">
+      <h1 class="text-left mb-5">Shopping Cart</h1>
+      {% if cart_items %}
+        <div class="row">
+          {% for item in cart_items %}
+            <div class="col-md-12 mb-4">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-4">
+                      {% if item.product.image %}
+                        <img src="{{ item.product.image }}" class="card-img-top" alt="{{ item.product.name }}">
+                      {% else %}
+                        <div class="text-center py-5">
+                          <h4 class="m-0">{{ item.product.name }}</h4>
+                        </div>
+                      {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                      <h4 class="card-title">{{ item.product.name }}</h4>
+                      <p class="card-text">{{ item.product.description }}</p>
+                      <form action="{% url 'update_cart' item.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                          <input type="number" class="form-control" name="weight" value="{{ item.weight }}" step="0.1" min="0">
+                          <div class="input-group-append">
+                            <span class="input-group-text">Kg</span>
+                          </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <p class="card-text font-weight-bold">{{ item.product.price }} $</p>
+                          <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                      </form>
+                      <hr>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <p class="card-text font-weight-bold">Total Cost:</p>
+                        <p class="card-text font-weight-bold">{{ total_cost }} $</p>
+                      </div>
+                      <form action="{% url 'remove_from_cart' item.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-icon">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+          <div class="col-md-12 mb-4">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h4 class="card-title font-weight-bold">Total Cost:</h4>
+                  <h4 class="card-title font-weight-bold">{{ total_cost }} $</h4>
+                </div>
+                <form action="{% url 'purchase_confirmation' %}" method="post" onsubmit="return confirm('Are you sure about your purchase?')">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary btn-block">Purchase</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <p class="text-center">Your cart is empty.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <style>
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .btn-link {
+      border: none;
+      text-decoration: underline;
+      color: #007bff;
+    }
+
+    .btn-primary {
+      border-radius: 20px;
+      padding: 10px 20px;
+      color: white;
+      background-color: #7aa66f;
+      border-color: #7aa66f;
+    }
+
+    .btn-primary:hover {
+      background-color: #586e52;
+      border-color: #586e52;
+    }
+
+    
+    body {
+      /* fallback for old browsers */
+        background: #F2F0EB;
+
+        /* Chrome 10-25, Safari 5.1-6 */
+        background: -webkit-linear-gradient(to right, #F2F0EB, rgb(167, 175, 151));
+
+        /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background: linear-gradient(to right, #F2F0EB, rgb(239, 234, 213))
+    }
+  </style>
+{% endblock %}

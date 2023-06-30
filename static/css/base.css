@@ -1,0 +1,49 @@
+/* .header h3,
+		.header .btn {
+			margin-top: 10px;
+		}
+
+		.lower-header ul.nav li.nav-item a.nav-link {
+			color: #fff;
+		} */
+
+table {
+	border-collapse: collapse; /* remove spacing between cells */
+	width: 100%; /* set table width to fill available space */
+}
+		
+td {
+	padding: 0; /* remove cell padding */
+	vertical-align: top; /* align cell content to top */
+	text-align: center; /* center cell content horizontally */
+}
+		
+img {
+	display: block; /* remove any extra spacing around the image */
+	width: 100%; /* make the image fill its cell */
+	height: auto; /* maintain aspect ratio */
+}
+
+
+.gradient-custom {
+    /* fallback for old browsers */
+    background: #4d5a44;
+    
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to bottom right, rgb(145, 168, 153), rgb(23, 130, 61));
+    
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to bottom right, rgb(145, 168, 153), rgb(23, 130, 61))
+}
+    
+    .card-registration .select-input.form-control[readonly]:not([disabled]) {
+    font-size: 1rem;
+    line-height: 2.15;
+    padding-left: .75em;
+    padding-right: .75em;
+    }
+    .card-registration .select-arrow {
+    top: 13px;
+    }
+
+

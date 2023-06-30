@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container" style="margin: 10rem;">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card" style="border-radius: 1rem;">
+          <div class="card-header text-center" style="background-color: #7aa66f">
+            <h1 class="card-title">Thank you for your purchase!</h1>
+          </div>
+          <div class="card-body text-center">
+            <p class="lead">Your order has been confirmed. Here are the details:</p>
+            <ul class="list-group mb-3">
+              {% for item in order.cartitem_set.all %}
+                <li class="list-group-item">{{ item.product.name }} - {{ item.weight }}{% if not request.user.is_seller %}g{% else %}kg{% endif %} - {{ item.product.price }} * {{ item.weight }}</li>
+              {% endfor %}
+            </ul>
+            <p class="lead">Total cost: {{ order.total_cost }}</p>
+            <p class="lead">Order ID: {{ order.id }}</p>
+            <div class="d-grid gap-2">
+              <p><a href="{% url 'profile' %}" class="btn btn-primary">View Profile</a></p>
+              <p><a href="{% url 'home' %}" class="btn btn-secondary">Return to Homepage</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% block extra_css %}
+  <style>
+
+  .btn-primary {
+    
+    padding: 10px 20px;
+    color: white;
+    background-color: #7aa66f;
+    border-color: #7aa66f;
+  }
+
+  .btn-primary:hover {
+    background-color: #586e52;
+    border-color: #586e52;
+  }
+
+
+</style>
+{% endblock %}
+{% endblock %}

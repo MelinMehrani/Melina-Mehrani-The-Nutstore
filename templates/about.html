@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row align-items-center">
+    <div class="col-lg-6">
+      <h1 class="mb-4">About Our Nut Store</h1>
+      <p class="lead">Welcome to our nut store! We are a family-owned business that has been providing high-quality nuts to our customers for over 50 years.</p>
+      <p>Our story began in the early 1970s when our founder, Melina Mehrani (The Ghost), decided to turn her passion for nuts into a business. She started by selling her homemade nut mixes at local farmers' markets, and soon her products became popular among the community. With the support of her family and customers, Melina opened her first store in downtown in 1975.</p>
+      <p>Over the years, our store has grown and evolved, but one thing has remained constant: our commitment to providing the freshest and highest quality nuts to our customers. We source our nuts from trusted suppliers and roast them in-house to ensure that they are packed with flavor and nutrition.</p>
+      <p>In the 1990s, we expanded our product line to include a variety of nut butters and snacks, such as trail mixes and granolas. We also started offering gift baskets and custom nut mixes for special occasions, such as weddings and corporate events.</p>
+      <p>Today, our store is run by Melina's real body (Not the Ghost), Melina, who shares her ghost's passion for nuts and continues to uphold our tradition of excellence. We are proud to be a part of the local community and to have served generations of customers.</p>
+      <p>Thank you for choosing our store for your nut needs. We hope you enjoy our products as much as we enjoy making them!</p>
+    </div>
+    <div class="col-lg-6">
+      <img src="{% static 'images/store.jpg' %}" class="img-fluid rounded" alt="Your Image">
+    </div>
+  </div>
+</div>
+{% endblock %}

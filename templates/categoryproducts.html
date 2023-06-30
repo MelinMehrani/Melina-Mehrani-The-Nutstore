@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+  <h1 class="text-center mb-5">{{ category|title }}</h1>
+  <div class="row justify-content-center" style="margin-top: 2rem; margin-bottom: 2rem;">
+    {% for product in products %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm" style=" border-radius: 1rem; border-color: rgb(230, 230, 230);">
+          {% if product.image %}
+            <img src="{{ product.image }}" class="card-img-top" alt="{{ product.name }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description }}</p>
+            <p class="card-text font-weight-bold">{{ product.price }} $</p>
+            <form action="{% url 'add_to_cart' product.id %}" method="get">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary btn-block btn-rounded btn-hover">
+                Add to Cart
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+
+{% block extra_css %}
+  <style>
+    /* .card {
+      margin: 1.5rem;
+      border-radius: 1rem;
+      border-color: rgb(230, 230, 230);
+    }
+
+    .row {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    } */
+    .btn-hover {
+      color: white;
+      background-color: #7aa66f;
+      border-color: #7aa66f;
+      border-radius: 5rem;
+    }
+
+    .btn-hover:hover {
+      background-color: #586e52;
+      border-color: #586e52;
+    }
+
+  </style>
+{% endblock %}
+{% endblock %}

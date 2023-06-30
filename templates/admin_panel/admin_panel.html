@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container" style="margin-top: 10rem; margin-bottom: 10rem;">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header" style="background-color: #7aa66f">
+            <h1 class="card-title text-center">Welcome to Admin Panel</h1>
+          </div>
+          <div class="card-body">
+            <div class="row justify-content-center">
+              <div class="col-md-6">
+                <ul class="list-group">
+                  <li class="list-group-item"><a href="{% url 'manage_products' %}" class="text-decoration-none link-hover">Manage Products</a></li>
+                  <li class="list-group-item"><a href="{% url 'preview_orders' %}" class="text-decoration-none link-hover">Preview Orders</a></li>
+                  <li class="list-group-item"><a href="{% url 'manage_warehouses' %}" class="text-decoration-none link-hover">Manage Warehouses</a></li>
+                  <li class="list-group-item"><a href="{% url 'city_add' %}" class="text-decoration-none link-hover">Add Cities</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .link-hover {
+      color: #455047;
+    }
+
+    .link-hover:hover {
+      color: #758a79;
+    }
+  </style>
+{% endblock %}

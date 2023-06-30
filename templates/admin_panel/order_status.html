@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="margin-top: 4rem; margin-bottom: 4rem;">
+  <h1 class="my-4">Order Detail</h1>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Order Information</h5>
+          <ul class="list-unstyled">
+            <li><strong>Order ID:</strong> {{ order.id }}</li>
+            <li><strong>Date:</strong> {{ order.created_at }}</li>
+            <li><strong>Status:</strong> {{ order.status }}</li>
+            <li><strong>Customer:</strong> {{ order.user.get_full_name }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Total Cost</h5>
+          <p class="card-text">${{ order.total_cost }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Order Items</h5>
+          <ul class="list-unstyled">
+            {% for item in order.items.all %}
+            <li>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="mb-1">{{ item.product.name }}</h6>
+                  <p class="mb-0">${{ item.price }}</p>
+                </div>
+                <p class="mb-0">{{ item.product.warehouse }}</p>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div> -->
+      <div class="col-md-6">
+      {% if user.is_staff %}
+      <div class="card mb-8">
+        <div class="card-body">
+          <h5 class="card-title">Update Status</h5>
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <p><button type="submit" class="btn btn-primary">Update Status</button>
+            <a href="{% url 'preview_orders' %}" class="btn btn-secondary">Back to Orders list</a></p>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .card-text {
+    margin-bottom: 0;
+  }
+
+  .list-unstyled li {
+    margin-bottom: 0.5rem;
+  }
+
+  .list-unstyled li strong {
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+
+  .btn-primary {
+    
+    /* padding: 10px 20px; */
+    color: white;
+    background-color: #7aa66f;
+    border-color: #7aa66f;
+  }
+
+  .btn-primary:hover {
+    background-color: #586e52;
+    border-color: #586e52;
+  }
+
+  select,
+textarea {
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  color: #4e4e4e;
+  margin-bottom: 1rem;
+  /* width: 100%;
+  height: 45px; */
+  resize: none;
+}
+
+</style>
+{% endblock %}

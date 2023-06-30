@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<table>
+  <tr>
+    <td><div class="text-overlay" style="text-align: left;">
+      <h1>Welcome to our Nut Store</h1>
+      <p>High Quality Nuts</p><p>Scroll Down To Find Your Perfect Product</p>
+    </div><img src="{% static 'images/home3.jpg'%}" alt="Welcome"></td>
+    <td ><img src="{% static 'images/home1.jpg'%}" alt="Image 2"></td>
+  </tr>
+</table>
+
+  <!-- who are we -->
+  <div class="container-fluid mt-5" style="margin-top: 3rem; margin-bottom: 3rem;">
+    <div class="row justify-content-center align-items-center" style="margin-top: 6rem; margin-bottom: 8rem;">
+      <div class="col-md-8">
+        <div class="card rounded-3 shadow-sm border-0 custom-bg-color">
+          <div class="row g-0">
+            <div class="col-md-6" style="width: 100%; height: 100%;"> <img src="{% static 'images/store.jpg' %}" class="img-fluid rounded-start" alt="Image" style="object-fit: cover; width: 100%; height: 100%;"> </div> 
+            <!-- <div class="col-md-6 position-relative" style="height: 100%;">
+              <img src="{% static 'images/store.jpg' %}" class="position-absolute top-0 start-0 h-100 w-100 object-cover rounded-start" alt="Image">
+            </div> -->
+            <div class="col-md-6">
+              <div class="card-body">
+                <h2 class="card-title">Who are we?</h2>
+                <p class="card-text">Welcome to our nut store! We are a family-owned business that has been providing high-quality nuts to our customers for over 50 years.</p>
+                <p class="card-text">Continue reading to find out about Melina's Ghost who started selling nuts 30 years before her birth.</p>
+                <a href="{% url 'about' %}" class="btn btn-primary btn-hover">Learn More</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <div class="container mt-5" style="margin-top: 3rem; margin-bottom: 3rem;">
+  <h1>Featured Products</h1>
+  <div class="row justify-content-center" style="margin-top: 3rem;">
+    {% for category in categories %}
+    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+      <a href="{% url 'category' category %}">
+        <div class="card border-0 rounded-3 shadow-sm">
+          <div class="card-img-top rounded-top" style="height: 200px; background-image: url('{% static 'images/' %}{{ category }}.jpg'); background-size: cover; background-position: center; object-fit: cover;"></div>
+          <div class="card-body" style="text-align: center;">
+            <h5 class="card-title" style="color: black;">{{ category|title }}</h5>
+          </div>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+{% block extra_css %}
+  <style>
+    .custom-bg-color {
+      background-color: #F2F0EB;
+      border-radius: 25px;
+      padding: 1.5rem;
+      box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+    }
+    .card-body {
+      padding-left: 2rem;
+    }
+
+    .btn-hover {
+      background-color: transparent;
+      color: #000000;
+      border: 2px solid #000000;
+      transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+    .btn-hover:hover {
+      background-color: #7aa66f;
+      color: #000000;
+      border: #fff;
+    }
+
+    .card {
+  transition: transform 0.3s ease-out;
+  background-color: #F2F0EB;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card:hover .card-title {
+  color: black;
+  text-decoration: underline;
+}
+
+td {
+    position: relative;
+    padding: 0;
+  }
+td:first-child {
+    background-color: rgba(0,0,0,0.5);
+    opacity: 0.7;
+  }
+
+  td:first-child .text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #f9f0de;
+    text-align: center;
+    padding: 20px;
+  }
+
+  td:first-child .text-overlay h1 {
+    font-size: 48px;
+    margin-bottom: 30px;
+  }
+
+  td:first-child .text-overlay p {
+    font-size: 24px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  </style>
+{% endblock %}
+{% endblock %}

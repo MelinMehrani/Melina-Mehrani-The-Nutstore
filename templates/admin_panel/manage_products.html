@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="margin-top: 5rem; margin-bottom: 5rem;">
+  <h1 class="text-center mb-5">Manage Products</h1>
+
+  <form method="get" class="row mb-5">
+    <div class="form-group col-md-4">
+      <label for="category">Category:</label>
+      <select class="form-control" id="category" name="category">
+        <option value="">All Categories</option>
+        {% for choice in category_choices %}
+        <option value="{{ choice.0 }}" {% if choice.0 == category_filter %}selected{% endif %}>{{ choice.1 }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="city">City:</label>
+      <select class="form-control" id="city" name="city">
+        <option value="">All Cities</option>
+        {% for city in cities %}
+        <option value="{{ city }}" {% if city == city_filter %}selected{% endif %}>{{ city }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="warehouse">Warehouse:</label>
+      <select class="form-control" id="warehouse" name="warehouse">
+        <option value="">All Warehouses</option>
+        {% for warehouse in warehouses %}
+        <option value="{{ warehouse.pk }}" {% if warehouse.pk == warehouse_filter %}selected{% endif %}>{{ warehouse.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-12">
+      <button type="submit" class="btn btn-primary">Apply Filters</button>
+    </div>
+  </form>
+
+  <div class="card mb-5">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead style="text-align: center;">
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Price</th>
+              <th>Warehouse</th>
+              <th>Stock</th>
+              <th>Category</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in products %}
+            <tr>
+              <td>{{ product.name }}</td>
+              <td>{{ product.description }}</td>
+              <td>{{ product.price }} $</td>
+              <td>{{ product.warehouse.name }}</td>
+              <td>{{ product.stock }} Kg</td>
+              <td>{{ product.category }}</td>
+              <td><a href="{% url 'edit_product' product.pk %}" class="btn btn-primary btn-sm">Edit</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <p><a href="{% url 'add_product' %}" class="btn btn-primary">Add Product</a></p>
+  <p><a href="{% url 'admin_panel' %}" class="btn btn-secondary">Back to Admin Panel</a></p>
+</div>
+
+{% block extra_css %}
+  <style>
+
+  .btn-primary {
+    
+    padding: 10px 20px;
+    color: white;
+    background-color: #7aa66f;
+    border-color: #7aa66f;
+  }
+
+  .btn-primary:hover {
+    background-color: #586e52;
+    border-color: #586e52;
+  }
+
+
+</style>
+{% endblock %}
+{% endblock %}

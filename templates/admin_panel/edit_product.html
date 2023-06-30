@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-10 col-xl-8">
+        <div class="card shadow-sm rounded-3 border-light">
+          <div class="card-body p-5">
+            <div class="text-center mb-5">
+              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Edit Product</h3>
+            </div>
+            <div class="text-center">
+              <form method="post" class="form-horizontal d-inline-block">
+                {% csrf_token %}
+
+                <div class="row mb-4">
+                  <div class="col-sm-4">
+                    <div class="form-outline">
+                      <label class="form-label" for="{{ form.name.id_for_label }}">Name</label>
+                      {{ form.name }}
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-outline">
+                      <label class="form-label" for="{{ form.stock.id_for_label }}">Stock</label>
+                      {{ form.stock }}
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-outline">
+                      <label class="form-label" for="{{ form.price.id_for_label }}">Price</label>
+                      {{ form.price }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="{{ form.description.id_for_label }}">Description</label>
+                  {{ form.description }}
+                </div>
+
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="{{ form.image.id_for_label }}">Image URL</label>
+                  {{ form.image }}
+                </div>
+
+                <div class="row mb-4">
+                  <div class="col-sm-6">
+                    <div class="form-outline">
+                      <label class="form-label" for="{{ form.category.id_for_label }}">Category</label>
+                      {{ form.category }}
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-outline">
+                      <label class="form-label" for="{{ form.warehouse.id_for_label }}">Warehouse</label>
+                      {{ form.warehouse }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <button class="btn btn-primary btn-lg" type="submit" value="Submit">Save Changes</button>
+                  <a href="{% url 'manage_products' %}" class="btn btn-secondary btn-lg ml-3">Cancel</a>
+                </div>
+              </form>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% block extra_css %}
+<style>
+    body{
+        background-color:#f5f2e9;
+    }
+    .card {
+  
+  margin-bottom: 3rem;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.card-body {
+  padding: 1.5rem; /* adjust the padding as needed */
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+    .form-control {
+  border-radius: 10px;
+  border-color: #ced4da;
+  padding-left: 40px;
+}
+.form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.25rem rgba(128, 189, 255, 0.25);
+}
+
+label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #4e4e4e;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="url"],
+input[type="number"],
+select,
+textarea {
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1.2rem;
+  color: #4e4e4e;
+  margin-bottom: 1rem;
+  width: 100%;
+  height: 45px;
+  resize: none;
+}
+
+select option {
+  color: #374d38;
+}
+
+.form-outline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.form-outline label {
+  margin-bottom: 5px;
+}
+
+.form-outline .stock-label,
+.form-outline .price-label,
+.form-outline .image-label {
+  margin-top: 1rem;
+}
+
+.form-outline .stock-label::before,
+.form-outline .price-label::before,
+.form-outline .image-label::before {
+  content: attr(data-required) " ";
+  color: red;
+}
+
+.form-outline .stock-input,
+.form-outline .price-input,
+.form-outline .image-input {
+  position: relative;
+}
+
+.form-outline .stock-input::before,
+.form-outline .price-input::before,
+.form-outline .image-input::before {
+  content: attr(data-label);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #4e4e4e;
+}
+
+.form-outline .stock-input input,
+.form-outline .price-input input,
+.form-outline .image-input input {
+  padding-left: 110px;
+}
+
+.btn-primary {
+    background-color: #7aa66f;
+    border: none;
+    border-radius: 5px;
+    
+    font-weight: bold;
+    padding: 10px 20px;
+    margin-top: 1.5rem;
+  }
+
+  .btn-primary:hover {
+    background-color: #586e52;
+  }
+
+  .btn-secondary {
+    background-color: #f2f2f2;
+    border-color: #f2f2f2;
+    border-radius: 5px;
+    color: #4e4e4e;
+    
+    font-weight: bold;
+    padding: 10px 20px;
+    margin-top: 1.5rem;
+  }
+
+  .btn-secondary:hover {
+    background-color: #e6e6e6;
+    border-color: #e6e6e6;
+    color: #4e4e4e;
+  }
+
+
+</style>
+{% endblock %}
+{% endblock %}

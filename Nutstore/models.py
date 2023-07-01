@@ -34,7 +34,7 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
-    stock = models.DecimalField(max_digits = 10, decimal_places = 3) #added  #PAY ATTENTION MEL!: I have changed this from quantity to stock, MAKE SURE TO CHECK AND CHANGE THE NECESSARY THINGS
+    stock = models.DecimalField(max_digits = 10, decimal_places = 3) 
     category = models.CharField(max_length=200, choices=CATEGORY_CHOICES)
     image = models.URLField(blank=True)
     #image = models.ImageField(upload_to='product_images/', blank=True, null=True)
@@ -42,50 +42,13 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-#The products that a warehouse has. We write this in order to prevent deleting a whole product when we only want to delete forexample a product in one warehouse.
-# class WarehouseProduct(models.Model):
-#     warehouseid = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
-#     productid = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     quantity = models.PositiveIntegerField()
-
-#     def __str__(self):
-#         return self.name
-    
-# class Buyer(models.Model):
-#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-#     city = models.ForeignKey(City, on_delete=models.CASCADE)
-
-#     def __str__(self):
-#         return self.user.username
-
-
-#from .buyer import Buyer
-#from .product import Product
-
-# class Order(models.Model):
-#     buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE)
-#     #product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     products = models.ManyToManyField(Product)
-#     quantity = models.IntegerField()
-#     ordered_at = models.DateTimeField(auto_now_add=True)
-#     STATUS_CHOICES = (
-#         ('pending', 'Pending'),
-#         ('shipped', 'Shipped'),
-#         ('delivered', 'Delivered'),
-#     )
-#     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-
-#     def __str__(self):
-#         return f"{self.buyer.user.username} - {self.products.name} ({self.quantity})"
-#     #def __str__(self):
-#         #return f"Order #{self.pk}"
 
 
 #THE MODEL FOR SHOPPING CART:
 class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     user = models.ForeignKey('accounts.CustomUser', on_delete=models.CASCADE)
-    weight = models.DecimalField(max_digits=6, decimal_places=3)    #this actually allows us to have a weight up to 999999.99
+    weight = models.DecimalField(max_digits=9, decimal_places=3)    #this actually allows us to have a weight up to 999999.99
     is_active = models.BooleanField(default=True)
 
 
@@ -104,7 +67,3 @@ class Order(models.Model):
     def __str__(self):
         return f"Order #{self.id} by {self.user.username}"
     
-
-# class OrderItem(models.Model):
-#     name = models.CharField(max_length=200, on_delete=models.CASCADE)
-#     order = models.ForeignKey(Order)

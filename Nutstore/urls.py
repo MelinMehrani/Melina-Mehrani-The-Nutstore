@@ -2,14 +2,14 @@ from django.urls import path, include
 from . import views
 from django.contrib.auth.views import LoginView, LogoutView
 
-#app_name = 'warehouse' #Do we really need this?
+
 
 urlpatterns = [
     path('', views.home, name='home'), #homeUrl
     path('category/<str:category>/', views.category_products, name='category'), #categoryproducts url pattern
     path('profile/', views.profile, name='profile'), #Profile Url
     path('product/addtocart/<int:product_id>/', views.add_to_cart, name='add_to_cart'), #add the item to cart url pattern
-    path('cart/', views.cart, name='cart'), #users cart where chosen items are listed url pattern
+    path('cart/', views.cart, name='cart'),                  #users cart where chosen items are listed url pattern
     path('cart/<int:cart_item_id>/remove/', views.remove_from_cart, name='remove_from_cart'), #to remove items from cart
     path('cart/<int:cart_item_id>/update/', views.update_cart, name='update_cart'), #update weights in cart
     path('cart/purchase-confirmation/', views.purchase_confirmation, name='purchase_confirmation'), #purchase confirmation url pattern
@@ -26,7 +26,4 @@ urlpatterns = [
     path('edit_warehouse/<int:warehouse_id>/', views.edit_warehouse, name='edit_warehouse'), #edit warehouse page
     path('about/', views.AboutPageView.as_view(), name='about'),   #about page
     path('contact/', views.ContactPageView.as_view(), name='contact'),   #contact us page
-    #path('accounts/', include('django.contrib.auth.urls')),
-    #path('accounts/login/', LoginView.as_view(template_name='warehouse/login.html'), name='login'),
-    #path('accounts/logout/', LogoutView.as_view(), name='logout'),
 ]

@@ -43,18 +43,6 @@ def category_products(request, category):
     context = {'category': category, 'products': products, 'categories': categories}
     return render(request, 'categoryproducts.html', context)
 
-# def category_products(request, category):
-#     user_city = None
-#     if request.user.is_authenticated:  #filters the products based on user's city, if not logged in shows all the products
-#         try:
-#             user = get_user_model()
-#             user_profile = user.objects.get(email=request.user.email)
-#             user_city = user_profile.city
-#         except CustomUser.DoesNotExist:
-#             pass
-#     products = Product.objects.filter(category=category, warehouse__city=user_city)
-#     context = {'category': category, 'products': products}
-#     return render(request, 'categoryproducts.html', context)
 
 
 
@@ -112,7 +100,7 @@ def add_to_cart(request, product_id):
 
         # check if there is enough stock for the requested weight
         if total_weight > 0:
-            return HttpResponse('Error: not enough stock available.')
+            return HttpResponse('Error: Not Enough Stock Available.') 
        #This will ensure that the warehouses are checked in the order of their ID when we loop over them to find the warehouse with enough stock to fulfill the requested weight.
         # Redirect the user back to the previous page
         return redirect (str(reverse_lazy('category', args= (product.category,))))
@@ -120,52 +108,6 @@ def add_to_cart(request, product_id):
     return render(request , 'add_to_cart.html', {'product' : product})
     
 
-    
-    
-
-    
-
-    
-
-    
-
-#PREVIOUS ADD_TO_CART
-# @login_required  #if the user is not authenticated, will be redirected to login page and can't add an item without authentication to cart
-# def add_to_cart(request, product_id):
-#     product = Product.objects.get(id=product_id)
-#     weight = request.POST.get('weight')
-#     user = request.user
-
-#     if user.is_seller:      #WHOLESOME BUYERS WILL HAVE THE WEIGHTS IN KILOGRAM
-#         weight_unit = 'kg'
-#     else:                   #ORDINARY BUYERS WILL HAVE THE WEIGHTS IN GRAMS AS THEY PURCHASE IN LOWER AMOUNTS
-#         weight_unit = 'g'
-#         # convert weight from grams to kilograms
-#         weight = float(weight) / 1000.0
-
-#     # calculate the total weight in kilograms
-#     total_weight = float(weight)
-
-#     # get the total stock of the product in the user's city
-#     city_stock = Decimal('0')
-#     warehouses = Warehouse.objects.filter(city=user.city)
-#     for warehouse in warehouses:
-#         try:
-#             product_stock = Product.objects.get(id=product_id, warehouse=warehouse).stock
-#             city_stock += product_stock
-#         except Product.DoesNotExist:
-#             pass
-
-#     # check if there is enough stock for the item
-#     if total_weight > city_stock:
-#         return HttpResponse('Error: not enough stock available.')
-
-#     # create a new cart item
-#     cart_item = CartItem.objects.create(product=product, user=user, weight=total_weight)
-#     cart_item.save()
-
-#     # Redirect the user back to the previous page
-#     return redirect(request.META.get('HTTP_REFERER'))
 
 
 
@@ -221,37 +163,16 @@ def update_cart(request, cart_item_id):
                     
         except Product.DoesNotExist:
                 pass
-    # for city in preferred_cities:
-    #     warehouses = Warehouse.objects.filter(city=city).order_by('id')
-    #     for warehouse in warehouses:
-    #         try:
-    #             p = Product.objects.get(id=product.id, warehouse=warehouse)
-    #             available_stock = p.stock
-    #             if available_stock >= total_weight:
-    #                 break
-    #             else:
-    #                 total_weight -= available_stock
-    #         except Product.DoesNotExist:
-    #             pass
-    # if available_stock >= total_weight:
-    #     break
 
     # if there is not enough stock, revert the weight change and return an error message
     if total_weight > 0:
         cart_item.weight = old_weight
         cart_item.save()
-        return HttpResponse('Error: not enough stock available.')
+        return HttpResponse('Error: Not Enough Stock Available.') 
 
     return redirect('cart')
 
-#previous update cart 
-# @login_required
-# def update_cart(request, cart_item_id):
-#     user = request.user
-#     cart_item = CartItem.objects.get(id=cart_item_id, user=user)
-#     cart_item.weight = float(request.POST['weight'])
-#     cart_item.save()
-#     return redirect('cart')
+
 
 
 #THE PURCHASE CONFIRMATION VIEW AFTER SUBMITTING THE ORDERS
@@ -289,31 +210,6 @@ def purchase_confirmation(request):
 
     # redirect the user to the order confirmation page
     return render(request, 'purchase_confirmation.html', {'order': order, 'categories': categories})
-
-#previous purchase confirmation view
-# @login_required
-# def purchase_confirmation(request):
-#     user = request.user
-
-#     # retrieve the user's cart items and calculate the total cost
-#     cart_items = CartItem.objects.filter(user=user, is_active=True)
-#     total_cost = sum([item.product.price * item.weight for item in cart_items])
-
-#     # create a new order
-#     order = Order.objects.create(user=user, total_cost=total_cost)
-
-#     # update the stock levels of the warehouses
-#     for item in cart_items:
-#         warehouse = item.product.warehouse
-#         product = item.product
-#         weight = item.weight
-
-#         # subtract the weight of the item from the stock level of the product in the warehouse
-#         product_stock = product.stock - weight
-#         Product.objects.filter(id=product.id, warehouse=warehouse).update(stock=product_stock)
-
-#     # redirect the user to the order confirmation page
-#     return render(request, 'purchase_confirmation.html', {'order': order})
 
 
 

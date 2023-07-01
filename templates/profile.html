@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5" style="margin-top: 3rem; margin-bottom: 5rem;">
+<div class="container mt-5" style="margin-top: 4rem; margin-bottom: 5rem;">
   <div class="row">
     <div class="col-md-4">
       <div class="card mb-4 border-rounded">
@@ -40,7 +40,15 @@
                     <h5 class="mb-1">Order ID: {{ order.id }}</h5>
                     <small>{{ order.created_at|date:"F d, Y" }}</small>
                   </div>
-                  <!-- <p class="mb-1">Order Items: {{ order.items }} </p> -->
+                  <p class="mb-1">Order Items:
+                    <ul>
+                    {% for item in order.items.all %}
+                        <li>
+                            {{ item.product.name }},
+                            Weight: {{ item.weight }} Kg
+                        </li>
+                    {% endfor %}
+                    </ul></p>
                   <p class="mb-1">Order Total Cost: {{ order.total_cost }}</p>
                   <p class="mb-0">Status: {{ order.get_status_display }}</p>
                 </li>

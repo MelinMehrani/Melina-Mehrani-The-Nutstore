@@ -24,6 +24,7 @@ def home(request):
 #category view that fetches all the products for a given category and passes them to a categoryproducts.html template
 @login_required
 def category_products(request, category):
+    categories = set(product.category for product in Product.objects.all())
     user_city = ''
     if request.user.is_authenticated:     #filters the products based on user's city, if not logged in shows all the products
         try:
@@ -39,7 +40,7 @@ def category_products(request, category):
     .annotate(total_stock=Sum('stock')) \
     .order_by('name')
     print(products)
-    context = {'category': category, 'products': products}
+    context = {'category': category, 'products': products, 'categories': categories}
     return render(request, 'categoryproducts.html', context)
 
 # def category_products(request, category):
@@ -61,9 +62,11 @@ def category_products(request, category):
 #Retrives the current user and all the orders this user has made
 @login_required
 def profile(request):
+    categories = set(product.category for product in Product.objects.all())
     user = request.user
     orders = Order.objects.filter(user=user)
     context = {
+        'categories': categories,
         'user': user,
         'orders': orders,
     }
@@ -169,10 +172,11 @@ def add_to_cart(request, product_id):
 #THE SHOPPING CART WHERE ALL THE CHOSEN ITEMS BY THE USERS IS VIEWED
 @login_required
 def cart(request):
+    categories = set(product.category for product in Product.objects.all())
     user = request.user
-    cart_items = CartItem.objects.filter(user=user)
+    cart_items = CartItem.objects.filter(user=user, is_active=True)
     total_cost = sum([(item.product.price * item.weight) for item in cart_items])
-    context = {'cart_items': cart_items, 'total_cost': total_cost}
+    context = {'cart_items': cart_items, 'total_cost': total_cost, 'categories': categories}
     return render(request, 'cart.html', context)
 
 #TO REMOVE ITEMS FROM THE CART
@@ -254,15 +258,17 @@ def update_cart(request, cart_item_id):
 @login_required
 def purchase_confirmation(request):
     user = request.user
-
+    categories = set(product.category for product in Product.objects.all())
     # retrieve the user's cart items and calculate the total cost
-    cart_items = CartItem.objects.filter(user=user)
+    cart_items = CartItem.objects.filter(user=user, is_active=True)
     total_cost = sum([item.product.price * item.weight for item in cart_items])
 
     # create a new order
     order = Order.objects.create(user=user, total_cost=total_cost)
     for item in cart_items:
         order.items.add(item)
+        item.is_active = False
+        item.save()
     order.save()
 
     # update the stock level of the product in the warehouse where the purchase was made
@@ -277,12 +283,12 @@ def purchase_confirmation(request):
             p.stock -= weight
             p.save()
 
-    # delete the user's cart items
-    cart_items_delete = CartItem.objects.filter(user=user)
-    cart_items_delete.delete()
+    # # delete the user's cart items
+    # cart_items_delete = CartItem.objects.filter(user=user, is_active=True)
+    # cart_items_delete.delete()
 
     # redirect the user to the order confirmation page
-    return render(request, 'purchase_confirmation.html', {'order': order})
+    return render(request, 'purchase_confirmation.html', {'order': order, 'categories': categories})
 
 #previous purchase confirmation view
 # @login_required
@@ -290,7 +296,7 @@ def purchase_confirmation(request):
 #     user = request.user
 
 #     # retrieve the user's cart items and calculate the total cost
-#     cart_items = CartItem.objects.filter(user=user)
+#     cart_items = CartItem.objects.filter(user=user, is_active=True)
 #     total_cost = sum([item.product.price * item.weight for item in cart_items])
 
 #     # create a new order
@@ -315,14 +321,15 @@ def purchase_confirmation(request):
 @login_required
 @user_passes_test(lambda u: u.is_superuser)   #this makes sure only superusers get access to this page
 def admin_panel(request):
-    return render(request, 'admin_panel/admin_panel.html')
+    categories = set(product.category for product in Product.objects.all())
+    return render(request, 'admin_panel/admin_panel.html', {'categories': categories})
 
 #MANAGE PRODUCTS (LIST OF PRODUCTS)
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def manage_products(request):
     products = Product.objects.all()
-
+    categories = set(product.category for product in Product.objects.all())
     # Get filter parameters from request
     category = request.GET.get('category')
     city = request.GET.get('city')
@@ -344,6 +351,7 @@ def manage_products(request):
         'category_filter': category,
         'city_filter': city,
         'warehouse_filter': warehouse,
+        'categories': categories
     }
     return render(request, 'admin_panel/manage_products.html', context)
 
@@ -351,6 +359,7 @@ def manage_products(request):
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def edit_product(request, pk):
+    categories = set(product.category for product in Product.objects.all())
     product = get_object_or_404(Product, pk=pk)
     form = ProductForm(instance=product)
 
@@ -362,6 +371,7 @@ def edit_product(request, pk):
 
     context = {
         'form': form,
+        'categories': categories
     }
     return render(request, 'admin_panel/edit_product.html', context)
 
@@ -369,6 +379,7 @@ def edit_product(request, pk):
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def add_product(request):
+    categories = set(product.category for product in Product.objects.all())
     form = ProductForm()
 
     if request.method == 'POST':
@@ -379,6 +390,7 @@ def add_product(request):
 
     context = {
         'form': form,
+        'categories': categories
     }
     return render(request, 'admin_panel/add_product.html', context)
 
@@ -388,6 +400,7 @@ def add_product(request):
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def preview_orders(request):
+    categories = set(product.category for product in Product.objects.all())
     order_id_query = request.GET.get('order_id')
     if order_id_query:
         orders = Order.objects.filter(id=order_id_query).order_by('-created_at')   #This is for the search by id
@@ -397,6 +410,7 @@ def preview_orders(request):
     context = {
         'orders': orders,
         'order_id_query': order_id_query,
+        'categories': categories
     }
     return render(request, 'admin_panel/preview_orders.html', context)
 
@@ -404,6 +418,7 @@ def preview_orders(request):
 #THIS IS THE VIEW FOR THE SUPERUSER TO CHANGE THE STATUS OF EACH ORDER WHEN DELIVERED
 @user_passes_test(lambda u: u.is_superuser)
 def order_status(request, order_id):
+    categories = set(product.category for product in Product.objects.all())
     # Retrieve the Order object for the selected order ID
     order = get_object_or_404(Order, id=order_id)
     if request.method == 'POST':
@@ -417,6 +432,7 @@ def order_status(request, order_id):
     context = {
         'order': order,
         'form': form,
+        'categories': categories
     }
     return render(request, 'admin_panel/order_status.html', context)
 
@@ -426,6 +442,7 @@ def order_status(request, order_id):
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def manage_warehouses(request):
+    categories = set(product.category for product in Product.objects.all())
     # Retrieve all warehouses
     warehouses = Warehouse.objects.all()
 
@@ -440,7 +457,8 @@ def manage_warehouses(request):
         warehouses = warehouses.filter(id__icontains=search)
 
     context = {
-        'warehouses': warehouses
+        'warehouses': warehouses,
+        'categories': categories
     }
     return render(request, 'admin_panel/manage_warehouses.html', context)
 
@@ -448,6 +466,7 @@ def manage_warehouses(request):
 #AddWarehousePageView
 @user_passes_test(lambda u: u.is_superuser)    
 def create_warehouse(request):
+    categories = set(product.category for product in Product.objects.all())
     if request.method == 'POST':
         form = WarehouseForm(request.POST)
         if form.is_valid():
@@ -455,7 +474,7 @@ def create_warehouse(request):
             return redirect('manage_warehouses')    #if the form is valid then it will be saved and the user will be redirected to manage_warehouses page
     else:
         form = WarehouseForm()
-    return render(request, 'admin_panel/create_warehouse.html', {'form': form})
+    return render(request, 'admin_panel/create_warehouse.html', {'form': form, 'categories': categories})
 
 #ADD CITY PAGE VIEW
 @user_passes_test(lambda u: u.is_superuser)
@@ -466,20 +485,23 @@ def city_add(request):
             city = form.save()
             return redirect('create_warehouse')
     else:
+        categories = set(product.category for product in Product.objects.all())
         form = CityForm()
-    return render(request, 'admin_panel/city_add.html', {'form': form})
+    return render(request, 'admin_panel/city_add.html', {'form': form, 'categories': categories})
 
 #WAREHOUSE DETAIL PAGE VIEW
 @user_passes_test(lambda u: u.is_superuser)
 def warehouse_detail(request, warehouse_id):
+    categories = set(product.category for product in Product.objects.all())
     # Retrieve the Warehouse object for the selected warehouse ID
     warehouse = get_object_or_404(Warehouse, id=warehouse_id)
     products = Product.objects.filter(warehouse=warehouse)
-    return render(request, 'admin_panel/warehouse_detail.html', {'warehouse': warehouse, 'products': products})
+    return render(request, 'admin_panel/warehouse_detail.html', {'warehouse': warehouse, 'products': products, 'categories': categories})
 
 #EDIT WAREHOUSE PAGE
 @user_passes_test(lambda u: u.is_superuser)
 def edit_warehouse(request, warehouse_id):
+    categories = set(product.category for product in Product.objects.all())
     # Retrieve the Warehouse object for the selected warehouse ID
     warehouse = get_object_or_404(Warehouse, id=warehouse_id)
 
@@ -495,7 +517,8 @@ def edit_warehouse(request, warehouse_id):
 
     context = {
         'warehouse': warehouse,
-        'form': form
+        'form': form,
+        'categories': categories
     }
     return render(request, 'admin_panel/edit_warehouse.html', context)
 

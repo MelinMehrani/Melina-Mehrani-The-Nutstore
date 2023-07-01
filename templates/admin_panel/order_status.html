@@ -25,13 +25,20 @@
         </div>
       </div>
     </div>
+    
 
-    <!-- <div class="col-md-6">
+    <div class="col-md-6">
       <div class="card mb-4">
         <div class="card-body">
           <h5 class="card-title">Order Items</h5>
           <ul class="list-unstyled">
-            {% for item in order.items.all %}
+              {% for item in order.items.all %}
+                  <li>
+                      {{ item.product.name }},
+                      Weight: {{ item.weight }} Kg
+                  </li>
+              {% endfor %}
+            <!-- {% for item in order.items.all %}
             <li>
               <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -41,25 +48,25 @@
                 <p class="mb-0">{{ item.product.warehouse }}</p>
               </div>
             </li>
-            {% endfor %}
+            {% endfor %} -->
           </ul>
         </div>
-      </div> -->
-      <div class="col-md-6">
-      {% if user.is_staff %}
-      <div class="card mb-8">
-        <div class="card-body">
-          <h5 class="card-title">Update Status</h5>
-          <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <p><button type="submit" class="btn btn-primary">Update Status</button>
-            <a href="{% url 'preview_orders' %}" class="btn btn-secondary">Back to Orders list</a></p>
-          </form>
-        </div>
       </div>
-      {% endif %}
-    </div>
+      
+        {% if user.is_staff %}
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Update Status</h5>
+            <form method="post">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <p><button type="submit" class="btn btn-primary">Update Status</button>
+              <a href="{% url 'preview_orders' %}" class="btn btn-secondary">Back to Orders list</a></p>
+            </form>
+          </div>
+        </div>
+        {% endif %}
+      
     </div>
   </div>
 </div>
